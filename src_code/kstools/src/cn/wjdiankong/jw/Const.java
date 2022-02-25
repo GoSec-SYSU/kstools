@@ -22,6 +22,7 @@ public final class Const {
 	public final static String hookAttachCodeStr = "\tinvoke-static {p1}, Lcn/wjdiankong/hookpms/ServiceManagerWraper;->hookPMS(Landroid/content/Context;)V\n";
 	public final static String hookCreateCodeStr = "\tinvoke-static/range {p0 .. p0}, Lcn/wjdiankong/hookpms/ServiceManagerWraper;->hookPMS(Landroid/content/Context;)V\n";
 
+	public static String packageName = "";
 	public static String pmsSmaliSmaliTmpDir = "";
 	public static String entryClassName = "";
 	public static String appSign = "";

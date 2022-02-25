@@ -120,5 +120,103 @@ public class AnalysisApk {
         }
         return null;
     }
+    public static String getAppPackageName(String apkUrl) {
+        isLauncher = false;
+        ZipFile zipFile;
+        try {
+            zipFile = new ZipFile(new File(apkUrl));
+            Enumeration<? extends ZipEntry> enumeration = zipFile.entries();
+            ZipEntry zipEntry = null;
+            while (enumeration.hasMoreElements()) {
+                zipEntry = (ZipEntry) enumeration.nextElement();
+                if (!zipEntry.isDirectory() && "AndroidManifest.xml".equals(zipEntry.getName())) {
+                    try {
+                        AXmlResourceParser parser = new AXmlResourceParser();
+                        parser.open(zipFile.getInputStream(zipEntry));
+                        while (true) {
+                            int type = parser.next();
+                            if (type == XmlPullParser.END_DOCUMENT) {
+                                break;
+                            }
+                            switch (type) {
+                                case XmlPullParser.START_TAG: {
+                                    String tagName = parser.getName();
+                                    if ("manifest".equals(tagName)) {
+                                        for (int i = 0; i != parser.getAttributeCount(); ++i) {
+                                            String attrName = parser.getAttributeName(i);
+                                            if ("package".equals(attrName)) {
+                                                pkgName = parser.getAttributeValue(i);
+                                                Const.appPkgName = pkgName;
+                                            }
+                                        }
+                                    } else if ("application".equals(tagName)) {
+                                        for (int i = 0; i != parser.getAttributeCount(); ++i) {
+                                            String attrName = parser.getAttributeName(i);
+                                            if ("name".equals(attrName)) {
+                                                String appName = parser.getAttributeValue(i);
+                                                if (appName.startsWith(".")) {
+                                                    Const.isApplicationEntry = true;
+                                                    return pkgName + appName;
+                                                }
+                                                return appName;
+                                            }
+                                        }
+                                    } else if ("activity".equals(tagName)) {
+                                        isLauncher = false;
+                                        for (int i = 0; i != parser.getAttributeCount(); ++i) {
+                                            String attrName = parser.getAttributeName(i);
+                                            if ("name".equals(attrName)) {
+                                                enterActivityName = parser.getAttributeValue(i);
+                                                break;
+                                            }
+                                        }
+                                    } else if ("action".equals(tagName)) {
+                                        for (int i = 0; i != parser.getAttributeCount(); ++i) {
+                                            String attrName = parser.getAttributeName(i);
+                                            if ("name".equals(attrName)) {
+                                                actionName = parser.getAttributeValue(i);
+                                                break;
+                                            }
+                                        }
+                                    } else if ("category".equals(tagName)) {
+                                        for (int i = 0; i != parser.getAttributeCount(); ++i) {
+                                            String attrName = parser.getAttributeName(i);
+                                            if ("name".equals(attrName)) {
+                                                categoryName = parser.getAttributeValue(i);
+                                                if (CATE_LAUNCHER.equals(categoryName)) {
+                                                    isLauncher = true;
+                                                }
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                break;
+
+                                case XmlPullParser.END_TAG: {
+                                    String tagName = parser.getName();
+                                    if ("intent-filter".equals(tagName)) {
+                                        if (CATE_MAIN.equals(actionName) && isLauncher) {
+                                            if (enterActivityName.startsWith(".")) {
+                                                Const.isApplicationEntry = false;
+                                                return pkgName + enterActivityName;
+                                            }
+                                            Const.isApplicationEntry = false;
+                                            return enterActivityName;
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } catch (IOException e) {
+        }
+        return null;
+    }
 
 }

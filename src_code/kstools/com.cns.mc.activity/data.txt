@@ -1,0 +1,54 @@
+Hash: 1474004926685384704
+start:
+Start Time: 1640265134875 2021-12-23_21:12:14
+Thread name: Thread[Thread-0,5,main]
+class and method name: gosec.mylog.Demo2$1.run(Demo2.java:8)
+Method Name: gosec.mylog.Demo2$1.run
+Method Start Time: 1640265134874 2021-12-23_21:12:14
+--------------------------------------------------------------------------------------
+Hash: 1474004926685384705
+start:
+Start Time: 1640265134875 2021-12-23_21:12:14
+Thread name: Thread[Thread-1,5,main]
+class and method name: gosec.mylog.Demo2$2.run(Demo2.java:20)
+Method Name: gosec.mylog.Demo2$2.run
+Method Start Time: 1640265134874 2021-12-23_21:12:14
+--------------------------------------------------------------------------------------
+Hash: 1474004926685384704
+getStack: 
+Start Time: 1640265134876 2021-12-23_21:12:14
+Thread name: Thread[Thread-0,5,main]
+class and method name: gosec.mylog.Demo2$1.run(Demo2.java:10)
+invoke stack:
+    gosec.mylog.Demo2$1.run(Demo2.java:10)
+    java.lang.Thread.run(Thread.java:748)
+End Time: 1640265134876 2021-12-23_21:12:14
+--------------------------------------------------------------------------------------
+Hash: 1474004926685384705
+getStack: 
+Start Time: 1640265134876 2021-12-23_21:12:14
+Thread name: Thread[Thread-1,5,main]
+class and method name: gosec.mylog.Demo2$2.run(Demo2.java:22)
+invoke stack:
+    gosec.mylog.Demo2$2.run(Demo2.java:22)
+    java.lang.Thread.run(Thread.java:748)
+End Time: 1640265134877 2021-12-23_21:12:14
+--------------------------------------------------------------------------------------
+Hash: 1474004926685384704
+logParameters: 
+Start Time: 1640265134877 2021-12-23_21:12:14
+Thread name: Thread[Thread-0,5,main]
+class and method name: gosec.mylog.Demo2$1.run(Demo2.java:14)
+parameter:
+    parameter 0: java.lang.Integer -> 1
+End Time: 1640265134877 2021-12-23_21:12:14
+--------------------------------------------------------------------------------------
+Hash: 1474004926685384705
+logParameters: 
+Start Time: 1640265134877 2021-12-23_21:12:14
+Thread name: Thread[Thread-1,5,main]
+class and method name: gosec.mylog.Demo2$2.run(Demo2.java:26)
+parameter:
+    parameter 0: java.lang.Integer -> 1
+End Time: 1640265134877 2021-12-23_21:12:14
+--------------------------------------------------------------------------------------

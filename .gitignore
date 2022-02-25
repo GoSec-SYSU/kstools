@@ -1,1 +1,5 @@
 .idea/
+src_code/kstools/out/*
+unzipapk/*
+tmp_dex/*
+smali_tmp/*

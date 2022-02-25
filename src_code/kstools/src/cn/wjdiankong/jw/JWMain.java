@@ -157,26 +157,31 @@ public class JWMain {
 			return;
 		}
 
-		if(!DoWorkUtils.zipApkWork(srcApkFile, rootPath+Const.unZipDir)){
+		/*if(!DoWorkUtils.zipApkWork(srcApkFile, rootPath+Const.unZipDir)){
 			DoWorkUtils.deleteTmpFile(rootPath);
 			return;
-		}
+		}*/
 
 		if(!DoWorkUtils.deleteMetaInf(rootPath+Const.unZipDir, aaptCmdDir, unSignedApkPath)){
 			DoWorkUtils.deleteTmpFile(rootPath);
 			return;
 		}
 
-		if(!DoWorkUtils.dexToSmali(rootPath + Const.unZipDir+File.separator, rootPath+Const.smaliTmpDir)){
+		/*if(!DoWorkUtils.dexToSmali(rootPath + Const.unZipDir+File.separator, rootPath+Const.smaliTmpDir)){
 			DoWorkUtils.deleteTmpFile(rootPath);
 			return;
-		}
+		}*/
 
-		System.out.println("modify the smali file in ./smali_tmp, and press anything to continue!");
-		Scanner sn = new Scanner(System.in);
-		sn.nextLine();
+//		System.out.println("modify the smali file in ./smali_tmp, and press anything to continue!");
+//		Scanner sn = new Scanner(System.in);
+//		sn.nextLine();
 
-		if(!DoWorkUtils.setSignAndPkgName()){
+//		if(!DoWorkUtils.setLogSmaliPackage(srcApkFile)){
+//			DoWorkUtils.deleteTmpFile(rootPath);
+//			return;
+//		}
+
+		/*if(!DoWorkUtils.setSignAndPkgName()){
 			DoWorkUtils.deleteTmpFile(rootPath);
 			return;
 		}
@@ -184,7 +189,7 @@ public class JWMain {
 		if(!DoWorkUtils.insertHookCode()){
 			DoWorkUtils.deleteTmpFile(rootPath);
 			return;
-		}
+		}*/
 
 		if(!DoWorkUtils.smaliToDex(rootPath+File.separator+Const.smaliTmpDir+File.separator, rootPath + File.separator + Const.tmpdexPath + File.separator)){
 			DoWorkUtils.deleteTmpFile(rootPath);
@@ -201,7 +206,7 @@ public class JWMain {
 			return;
 		}
 
-		DoWorkUtils.deleteTmpFile(rootPath);
+		//DoWorkUtils.deleteTmpFile(rootPath);
 
 	}
 

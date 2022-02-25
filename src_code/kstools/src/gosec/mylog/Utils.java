@@ -7,7 +7,7 @@ import java.util.Set;
 public class Utils {
     private static final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");//设置日期格式
     protected static final String longLine = "****************************************************************************************************************";
-    protected static final String shortLine = "-----------------------------------------";
+    protected static final String line = "--------------------------------------------------------------------------------------";
     private static final Set<String> primitiveTypeSet = new HashSet<>();
 
     static {
@@ -59,7 +59,7 @@ public class Utils {
     protected static String endLine(String str) {
         return str +
                 "End Time: " + System.currentTimeMillis() + " " + df.format(System.currentTimeMillis()) + "\n" +
-                shortLine + "\n";
+                line + "\n";
     }
 
     protected static String logData(String type, Object... objs) {
@@ -86,23 +86,39 @@ public class Utils {
 
     protected static String handlePara(Object obj) {
         if (obj == null) return "null";
-//        String objType = obj.getClass().getName();
-//        if (objType.equals("[B"))
-//            return new String((byte[]) obj);
-//        // 检测是否为以为数组 目前只考虑一维数组 并且基础类型地不考虑 byte[] 除外
-//        int l = 0;
-//        while (l < objType.length() && objType.charAt(l) == '[') l++;
-//        objType = objType.substring(l);
-//        if (l > 0 && !primitiveTypeSet.contains(objType)) {
-//            Object[] objs = (Object[]) obj;
-//            StringBuilder sb = new StringBuilder("\n");
-//            for (int i = 0; i < objs.length; i++) {
-//                if (objs[i] == null) sb.append(indent(8) + String.format("[%d] -> ", i) + " is null\n");
-//                else
-//                    sb.append(indent(8) + String.format("[%d] -> ", i) + objs[i].toString() + (i == objs.length - 1 ? "" : "\n"));
-//            }
-//            return sb.toString();
-//        }
-        return obj.toString();
+        // 防止toString里面也插了这玩意，循环调用toString，然后死循环
+        String objName = obj.getClass().getName();
+        StackTraceElement[] stackElements = new Throwable().getStackTrace();
+        for(int i=2; i<=6 && i<stackElements.length; i++){
+            StackTraceElement stackTraceElement = stackElements[i];
+            if(stackTraceElement.getClassName().equals(objName) && stackTraceElement.getMethodName().equals("toString"))
+                return "Endless loop";
+        }
+        // 处理返回
+        String ans = "";
+        try{
+            ans = obj.toString();
+        }catch (Exception e){
+            ans = e.toString();
+        }
+        return ans;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

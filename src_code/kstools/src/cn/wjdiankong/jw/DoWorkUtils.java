@@ -5,9 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import cn.wjdiankong.kstools.AnalysisApk;
 import cn.wjdiankong.kstools.ApkSign;
@@ -29,7 +27,7 @@ public class DoWorkUtils {
 
     public static String smaliFileNameGetter(int i) {
         String ans = "smali";
-        ans += i == 0 ? "" : "_classes" + Integer.toString(i);
+        ans += i == 0 ? "" : "_classes" + i;
         return ans;
     }
 
@@ -91,10 +89,10 @@ public class DoWorkUtils {
     }
 
     // 替换掉检测微信的
-    public static void main(String[] args) {
-        String path = "E:\\研究生计网助教工作";
-        removeAllCheckWechat(path);
-    }
+//    public static void main(String[] args) {
+//        String path = "E:\\研究生计网助教工作";
+//        removeAllCheckWechat(path);
+//    }
 
     public static boolean removeAllCheckWechat(String fileDir) {
         File file = new File(fileDir);
@@ -149,6 +147,36 @@ public class DoWorkUtils {
         }
     }
 
+    public static void main(String[] args) {
+        List<String> list = new ArrayList<>();
+        list.add("classes13.dex");
+        list.add("classes34.dex");
+        list.add("classes11.dex");
+        list.add("classes.dex");
+        list.add("classes1.dex");
+        list.add("classes2.dex");
+        Collections.sort(list, new Comparator<String>() {
+            int getNumInEnd(String str){
+                if(str.equals("classes")) return Integer.MIN_VALUE;
+                int n = str.length();
+                int l = n-1;
+                for(; l>=0; l--){
+                    if('0'<=str.charAt(l-1) && str.charAt(l-1)<='9')
+                        continue;
+                    break;
+                }
+                return Integer.parseInt(str.substring(l));
+            }
+            @Override
+            public int compare(String o1, String o2) {
+                return getNumInEnd(o1.split("\\.")[0])<getNumInEnd(o2.split("\\.")[0]) ? -1 : 1;
+            }
+        });
+        for(String str: list){
+            System.out.println(str);
+        }
+    }
+
     /**
      * 将dex转化成smali
      */
@@ -172,6 +200,23 @@ public class DoWorkUtils {
                 dexFileList.add(file.getName());
             }
         }
+        Collections.sort(dexFileList, new Comparator<String>() {
+            int getNumInEnd(String str){
+                if(str.equals("classes")) return Integer.MIN_VALUE;
+                int n = str.length();
+                int l = n-1;
+                for(; l>=0; l--){
+                    if('0'<=str.charAt(l-1) && str.charAt(l-1)<='9')
+                        continue;
+                    break;
+                }
+                return Integer.parseInt(str.substring(l));
+            }
+            @Override
+            public int compare(String o1, String o2) {
+                return getNumInEnd(o1.split("\\.")[0])<getNumInEnd(o2.split("\\.")[0]) ? -1 : 1;
+            }
+        });
         System.out.println(String.format("共%d个dex文件", dexFileList.size()));
         // 为包存储，防止方法数超过65535
         for (int i = 0; i < dexFileList.size(); i++) {
@@ -403,6 +448,23 @@ public class DoWorkUtils {
             file.mkdirs();
         }
         List<String> childSmaliFileList = FileUtils.getChildFileName(smaliDir);
+        Collections.sort(childSmaliFileList, new Comparator<String>() {
+            int getNumInEnd(String str){
+                if(str.equals("smali")) return Integer.MIN_VALUE;
+                int n = str.length();
+                int l = n-1;
+                for(; l>=0; l--){
+                    if('0'<=str.charAt(l-1) && str.charAt(l-1)<='9')
+                        continue;
+                    break;
+                }
+                return Integer.parseInt(str.substring(l));
+            }
+            @Override
+            public int compare(String o1, String o2) {
+                return getNumInEnd(o1)<getNumInEnd(o2) ? -1 : 1;
+            }
+        });
         System.out.println(String.format("共%d个smali文件", childSmaliFileList.size()));
         for (String childSmaliFile : childSmaliFileList) {
             String dexFile = tmpDexDir + File.separator + dexFileNameGetter();
@@ -484,6 +546,18 @@ public class DoWorkUtils {
             System.out.println("添加dex文件到apk中失败，退出！:" + e.toString());
             return false;
         }
+    }
+
+    /**
+     * 使用aapt命令修改xml文件，设置最大app的最大内存限制
+     */
+    // TODO
+    public static boolean changeMaxHeapSize(String aaptCmdDir, String srcApkPath, String UnsiginedApkPath) {
+        // 拷贝原app的xml
+        // 把android:largeHeap="true"加入到原app的xml中
+        // 移除未签名的app的xml
+        // 把修改后的xml加入到未签名的app中
+        return true;
     }
 
     /**
